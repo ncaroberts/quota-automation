@@ -6,6 +6,12 @@ from quotalib import *
 import datetime
 from syslog import syslog
 
+#check dir exists: /glade/u/hsg/quota-automation/
+if not os.path.isdir('/glade/u/hsg/quota-automation/'):
+    print('/glade/u/hsg/quota-automation/ does not exist, Exiting!')
+    exit(1)
+
+
 #Only run with lock                                                                                                                                                  
 mylock = open('/glade/u/hsg/quota-automation/processquotas.lock', 'w+')
 max_lock_wait = 60             # 60 seconds
