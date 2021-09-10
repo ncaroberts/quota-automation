@@ -18,7 +18,7 @@ email_err = []
 
 def process_enddate():
     today = time.strftime("%m-%d-%Y")
-    con = SQL.connect('quota.sqlite')
+    con = SQL.connect('/glade/u/hsg/quota-automation/quota.sqlite')
     with con:
         cur = con.cursor()
         cur.execute('''SELECT * from history WHERE current = 1 AND expirenotice = 0''')
@@ -34,7 +34,7 @@ def process_enddate():
 
 
 def update_history(dbusername,updatevalue,updatewhat):    
-    con = SQL.connect('quota.sqlite')
+    con = SQL.connect('/glade/u/hsg/quota-automation/quota.sqlite')
     with con:
         cur = con.cursor()
         cur.execute('''UPDATE history SET {0} = ? WHERE username = ?'''.format(updatewhat), (updatevalue,dbusername))
@@ -152,7 +152,7 @@ def validate_process_data(dbid,dbticketnumber,dbusername,dbquotalimit,dbenddate,
 
 #delete entry from quotas table after processing
 def del_entry(dbid):
-    con = SQL.connect('quota.sqlite')
+    con = SQL.connect('/glade/u/hsg/quota-automation/quota.sqlite')
     with con:
         cur = con.cursor()
         cur.execute('''DELETE FROM quotas WHERE id = ?''', (dbid,))
@@ -162,7 +162,7 @@ def del_entry(dbid):
 
 #get entries in quota table, process
 def process_entries():
-    con = SQL.connect('quota.sqlite')
+    con = SQL.connect('/glade/u/hsg/quota-automation/quota.sqlite')
     with con:
         cur = con.cursor()
         cur.execute('''SELECT * FROM quotas''')
@@ -226,7 +226,7 @@ def process_entries():
 
 #FOR DEV: add new entry to be processed. This is a function for front-end 
 def add_entry(timestamp,username,quotalimit,enddate,ticketnumber,addedby):
-    con = SQL.connect('quota.sqlite')
+    con = SQL.connect('/glade/u/hsg/quota-automation/quota.sqlite')
     with con:
         cur = con.cursor()
         cur.execute('''INSERT INTO quotas(
@@ -238,14 +238,14 @@ def add_entry(timestamp,username,quotalimit,enddate,ticketnumber,addedby):
 #log everything to logfile
 def log_log(log_entry):
     date = time.strftime("%Y-%m-%d") 
-    logfile = 'quota.%s.log' % (date)
+    logfile = '/glade/u/hsg/quota-automation/quota.%s.log' % (date)
     logging.basicConfig(filename=logfile, format='%(asctime)s %(message)s', level=logging.INFO)
     logging.info(log_entry)
 
 
 #log successful updates to history table
 def log_history(date,username,quotalimit,enddate,ticketnumber,addedby,current,expirenotice): 
-    con = SQL.connect('quota.sqlite')
+    con = SQL.connect('/glade/u/hsg/quota-automation/quota.sqlite')
     with con:
         cur = con.cursor()
         cur.execute('''INSERT INTO history(
@@ -265,7 +265,7 @@ def check_nolocal():
 
 #build db if doesn't exist
 def builddb():
-    con = SQL.connect('quota.sqlite')
+    con = SQL.connect('/glade/u/hsg/quota-automation/quota.sqlite')
     with con:
         cur = con.cursor()
         cur.execute('''CREATE TABLE IF NOT EXISTS quotas(
