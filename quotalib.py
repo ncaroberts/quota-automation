@@ -237,7 +237,7 @@ def add_entry(timestamp,username,quotalimit,enddate,ticketnumber,addedby):
 
 #log everything to logfile
 def log_log(log_entry):
-    date = time.strftime("%Y-%m-%d") 
+    date = time.strftime("%m-%d-%Y") 
     logfile = '/glade/u/hsg/quota-automation/quota.%s.log' % (date)
     logging.basicConfig(filename=logfile, format='%(asctime)s %(message)s', level=logging.INFO)
     logging.info(log_entry)
