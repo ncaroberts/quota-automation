@@ -7,7 +7,7 @@ import datetime
 from syslog import syslog
 
 #Only run with lock                                                                                                                                                  
-mylock = open('processquotas.lock', 'w+')
+mylock = open('/glade/u/hsg/quota-automation/processquotas.lock', 'w+')
 max_lock_wait = 60             # 60 seconds
 lock_waited = 0                 #seconds
 lock_check_interval = 5         #seconds
