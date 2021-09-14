@@ -13,7 +13,7 @@ if not os.path.isdir('/glade/u/hsg/quota-automation/'):
 
 
 #Only run with lock                                                                                                                                                  
-mylock = open('/glade/u/hsg/quota-automation/processquotas.lock', 'w+')
+mylock = open('/glade/u/hsg/quota-automation/quota.lock', 'w+')
 max_lock_wait = 60             # 60 seconds
 lock_waited = 0                 #seconds
 lock_check_interval = 5         #seconds
