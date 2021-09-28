@@ -24,7 +24,7 @@ def process_enddate():
         cur.execute('''SELECT * from history WHERE current = 1 AND expirenotice = 0''')
         table = cur.fetchall()
         for row in table:
-            dbusername,dbticketnumber,dbenddate = row[2],row[4],row[5]
+            dbusername,dbenddate,dbticketnumber = row[2],row[4],row[5]
             d1 = datetime.datetime.strptime(dbenddate, '%m-%d-%Y').date()
             d2 = datetime.datetime.strptime(today, '%m-%d-%Y').date()
             if d1 <=  d2:
@@ -211,7 +211,7 @@ def process_entries():
                     email_header = 'csg,\n\nThe scratch storage quota update for user \'%s\' has been processed.\n\n' % (dbusername)
                     email_body = "%sBEFORE UPDATE:\n%s\n\nAFTER UPDATE:\n%s" % (email_header,user_quota_pre,user_quota_post)
                     update_history(dbusername,updatevalue=False,updatewhat='current')
-                    log_history(timestamp,dbusername,dbquotalimit,dbticketnumber,dbenddate,dbaddedby,current=True,expirenotice=False)
+                    log_history(timestamp,dbusername,dbquotalimit,dbenddate,dbticketnumber,dbaddedby,current=True,expirenotice=False)
                     send_email(dbusername,dbticketnumber,email_body,process_failure=False)
                     log_entry = ": Auto Process: Processed: dbid %s : %s %s %s %s %s %s" % (dbid,dbtimestamp,dbusername,dbquotalimit,dbticketnumber,dbenddate,dbaddedby)
                     log_log(log_entry)
@@ -238,7 +238,7 @@ def add_entry(timestamp,username,quotalimit,enddate,ticketnumber,addedby):
 #log everything to logfile
 def log_log(log_entry):
     date = time.strftime("%Y-%m-%d") 
-    logfile = '/glade/u/hsg/quota-automation/quota.%s.log' % (date)
+    logfile = '/glade/u/hsg/quota-automation/processquotas_logs/quota.%s.log' % (date)
     logging.basicConfig(filename=logfile, format='%(asctime)s %(message)s', level=logging.INFO)
     logging.info(log_entry)
 
