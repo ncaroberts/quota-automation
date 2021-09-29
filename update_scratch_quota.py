@@ -33,8 +33,8 @@ def check_nolocal():
         sys.exit(f'{path} exists, Exiting!')
 
 
-# check dir exists: /glade/u/hsg/bin/
-if not os.path.isdir('/glade/u/hsg/bin/'):
+# check dir exists: /glade/u/hsg/quota-automation
+if not os.path.isdir('/glade/u/hsg/quota-automation/'):
     print('/glade/u/hsg/quota-automation/ does not exist, Exiting!')
     #exit(1)
 
