@@ -1,4 +1,4 @@
-#!/ssg/bin/proposed/quotaproject/v1/bin/python3
+#!/glade/u/hsg/python3.9/bin/python3.9
 
 """
 Processes scratch request entry for users
@@ -97,7 +97,7 @@ def add_to_db(timestamp, username, quotalimit, enddate, ticket_number, addedby):
     :param: required ticket_number argument
     :param: required addedby argument
     """
-    con = sqlite3.connect(r"/glade/u/hsg/bin/quota.sqlite")
+    con = sqlite3.connect(r"/glade/u/hsg/quota-automation/quota.sqlite")
     with con:
         cur = con.cursor()
     data = ('INSERT INTO quotas (timestamp, username, quotalimit, enddate, ticketnumber, addedby) VALUES '
