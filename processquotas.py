@@ -52,7 +52,7 @@ check_nolocal()
 builddb()
 
 #FOR DB TESTING: call add_entry() 
-#add_entry(timestamp,username,quotalimit,enddate,ticketnumber,addedby)
+add_entry(timestamp,username,quotalimit,enddate,ticketnumber,addedby)
 
 # Call below to process quotas table entries
 if process_entries() is False:
