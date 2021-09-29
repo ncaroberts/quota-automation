@@ -1,11 +1,2 @@
 
-lamgt:/ssg/bin/proposed/quotaproject/jonwork/		#dev location for processquota.py
-/glade/u/hsg/quota-automation/				#shared location for logfiles, quota.sqlite, quota.lock
-glademgt1:/usr/local/quota-automation/       		#location of processquota.py and quotalib.py cloned from https://github.com/ncaroberts/quota-automation.git
 
-###
-
-processquotas.2021.09.14.log				#log file for glademgt1:/usr/local/quota-automation/processquota.py
-quota.lock						#lock file for glademgt1:/usr/local/quota-automation/processquota.py and 
-							#cheyenne:/glade/u/hsg/quota-automation
-quota.sqlite						#shared db 
