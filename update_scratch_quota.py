@@ -25,7 +25,7 @@ class DateRangeError(BaseException):
 
 def check_nolocal():
     """
-    Check nolocal file
+    Checks nolocal file
     """
     path = '/etc/nolocal'
     if os.path.isfile(path):
@@ -33,7 +33,7 @@ def check_nolocal():
         sys.exit(f'{path} exists, Exiting!')
 
 
-# check dir exists: /glade/u/hsg/quota-automation
+# checks if dir exists: /glade/u/hsg/quota-automation
 if not os.path.isdir('/glade/u/hsg/quota-automation/'):
     print('/glade/u/hsg/quota-automation/ does not exist, Exiting!')
     #exit(1)
@@ -61,7 +61,7 @@ while True:
 
 def builddb(db='quota.sqlite'):
     """
-    Builds databases for quota and log
+    Builds quotas and history tables if doesn't exist
     """
     con = sqlite3.connect(r"/glade/u/hsg/quota-automation/" + db)
     with con:
@@ -113,8 +113,8 @@ def add_to_db(timestamp, username, quotalimit, enddate, ticket_number, addedby):
 
 def check_username(username: str) -> str:
     """
-    Check username against '/etc/passwd' file
-    :param: takes argument username
+    Checks username against '/etc/passwd' file
+    :param: takes one argument username
     :return: return username if meets condition
     """
     try:
@@ -173,9 +173,10 @@ def check_enddate(date_string: str) -> Union[str, None]:
         print(f"Your end date must be in future date.")
         exit(1)
 
+
 def check_ticketnumber(ticket: str) -> str:
     """
-    Validate ticket number
+    Validates ticket number
     :param: requires argument for the function
     :return: returns the required date format
     """
@@ -193,15 +194,14 @@ def log_log(log_entry):
     logs invalid and successful entries to log file
     """
     date = datetime.datetime.now().strftime("%Y-%m-%d")
-    #logfile = 'update_scratch_quota.%s.log' % (date)
-    logfile = r"/glade/u/hsg/quota-automation/update_scratch_quota_logs/"'update_scratch_quota.%s.log' % (date)
+    logfile = r"/glade/u/hsg/quota-automation/update_scratch_quota_logs/"'update_scratch_quota.' + date + '.log'
     logging.basicConfig(filename=logfile, format='%(asctime)s %(message)s', level=logging.INFO)
     logging.info(log_entry)
 
 
-def view_pending():
+def view_pending() -> None:
     """
-    shows pending scratch quota update requests
+    Shows pending scratch quota update requests
     :param: takes no argument
     :param: prints out the database
     """
@@ -214,9 +214,9 @@ def view_pending():
     print(data)
 
 
-def view_history():
+def view_history() -> None:
     """
-    shows history of approved scratch quota updates
+    Shows history of approved scratch quota updates
     :param: takes no argument
     """
     con = sqlite3.connect(r"/glade/u/hsg/quota-automation/quota.sqlite")
@@ -260,4 +260,3 @@ if __name__ =="__main__":
         view_pending()
     elif args.subcommand == 'history':
         view_history()
-
