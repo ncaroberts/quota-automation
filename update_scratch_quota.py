@@ -23,7 +23,7 @@ class DateRangeError(BaseException):
     def __init__(self, message: str):
         super().__init__(message)
 
-def check_nolocal():
+def check_nolocal() -> None:
     """
     Checks nolocal file
     """
@@ -36,7 +36,7 @@ def check_nolocal():
 # checks if dir exists: /glade/u/hsg/quota-automation
 if not os.path.isdir('/glade/u/hsg/quota-automation/'):
     print('/glade/u/hsg/quota-automation/ does not exist, Exiting!')
-    #exit(1)
+    exit(1)
 
 
 # Only run with lock
@@ -51,15 +51,15 @@ while True:
         break
     except IOError as e:
         if lock_waited >= max_lock_wait:
-            print('Can not get lock... Waited %s seconds' % (max_lock_wait))
+            print('Can not get lock... Waited {max_lock_wait} seconds')
             exit(1)
         else:
-            print("Waiting for lock up to %s seconds..." % (max_lock_wait))
+            print("Waiting for lock up to {max_lock_wait} seconds...")
             time.sleep(lock_check_interval)     #Try again every check_interval seconds
             lock_waited += lock_check_interval
 
 
-def builddb(db='quota.sqlite'):
+def builddb(db:str='quota.sqlite') -> None:
     """
     Builds quotas and history tables if doesn't exist
     """
@@ -87,7 +87,7 @@ def builddb(db='quota.sqlite'):
                        expirenotice BOOL NOT NULL)''')
 
 
-def add_to_db(timestamp, username, quotalimit, enddate, ticket_number, addedby):
+def add_to_db(timestamp: str, username: str, quotalimit: int, enddate: str, ticket_number: str, addedby: str) -> None:
     """
     Inserts quota request data into the database
     :param: required timestamp argument
@@ -189,7 +189,7 @@ def check_ticketnumber(ticket: str) -> str:
         return ticket
 
 
-def log_log(log_entry):
+def log_log(log_entry) -> None:
     """
     logs invalid and successful entries to log file
     """
@@ -226,6 +226,7 @@ def view_history() -> None:
     cur.execute("SELECT id, timestamp, username, quotalimit, enddate, ticketnumber, addedby, current, expirenotice FROM history")
     data = from_db_cursor(cur)
     print(data)
+
 
 if __name__ =="__main__":
     parser = argparse.ArgumentParser(prog='update_scratch_quota')

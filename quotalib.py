@@ -42,7 +42,7 @@ def update_history(dbusername,updatevalue,updatewhat):
 
 def make_quota_update(dbusername,dbquotalimit):
     send_cmd = "df"	#for test/dev
-    #send_cmd = "/nfs/home/dasg/apps/bin/glade_setquota set scratch {0} {1}t".format(dbusername,dbquotalimit)
+    #send_cmd = "sudo /nfs/home/dasg/apps/bin/glade_setquota set scratch {0} {1}t".format(dbusername,dbquotalimit)
     p = Popen(send_cmd, stdout=PIPE, shell=True)
     output,err = p.communicate()
     updated_quota = output.decode('utf-8')
@@ -55,7 +55,7 @@ def make_quota_update(dbusername,dbquotalimit):
 
 def get_quota(dbusername):
     #send_cmd = "df"	#for test/dev
-    send_cmd = "/nfs/home/dasg/apps/bin/glade_setquota get scratch {0}".format(dbusername)
+    send_cmd = "sudo /nfs/home/dasg/apps/bin/glade_setquota get scratch {0}".format(dbusername)
     p = Popen(send_cmd, stdout=PIPE, shell=True)
     output,err = p.communicate()
     user_quota = output.decode('utf-8')

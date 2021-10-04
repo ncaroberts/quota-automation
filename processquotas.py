@@ -24,10 +24,10 @@ while True:
         break
     except IOError as e:
         if lock_waited >= max_lock_wait:
-            print('Can not get lock... Waited %s seconds' % (max_lock_wait))
+            #print('Can not get lock... Waited %s seconds' % (max_lock_wait))
             exit(1)
         else:
-            print("Waiting for lock up to %s seconds..." % (max_lock_wait))
+            #print("Waiting for lock up to %s seconds..." % (max_lock_wait))
             time.sleep(lock_check_interval)     #Try again every check_interval seconds
             lock_waited += lock_check_interval
 
@@ -45,16 +45,14 @@ active = True
 expirenotice = False
 ########################################
 
-#THIS SHOULD BE IN FIRST RUN IN USER INTERFACE AND PROCESSQUOTA.PY: if nolocal exists on login nodes, exit
 check_nolocal()
 
-#THIS CALL SHOULD BE FIRST RUN IN USER INTERFACE: build db if doesn't exist
 builddb()
 
 #FOR DB TESTING: call add_entry() 
 add_entry(timestamp,username,quotalimit,enddate,ticketnumber,addedby)
 
-# Call below to process quotas table entries
+
 if process_entries() is False:
     print('Nothing to process, Exiting!')
     process_enddate()
