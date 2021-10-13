@@ -16,7 +16,7 @@ process_err = 0
 email_err = []
 
 
-def process_enddate():
+def process_enddate():    #fix for 'reverted'
     today = time.strftime("%m-%d-%Y")
     con = SQL.connect('/glade/u/hsg/quota-automation/quota.sqlite')
     with con:
@@ -25,12 +25,13 @@ def process_enddate():
         table = cur.fetchall()
         for row in table:
             dbusername,dbenddate,dbticketnumber = row[2],row[4],row[5]
-            d1 = datetime.datetime.strptime(dbenddate, '%m-%d-%Y').date()
-            d2 = datetime.datetime.strptime(today, '%m-%d-%Y').date()
-            if d1 <=  d2:
-                update_history(dbusername,updatevalue=True,updatewhat='expirenotice')
-                email_body = 'csg,\n\nThe scratch storage quota for user \'%s\' has reached the defined end date. Please update user quota.' % (dbusername) 
-                send_email(dbusername,dbticketnumber,email_body,process_failure=False)
+            if row[4] != 'reverted':
+                d1 = datetime.datetime.strptime(dbenddate, '%m-%d-%Y').date()
+                d2 = datetime.datetime.strptime(today, '%m-%d-%Y').date()
+                if d1 <=  d2:
+                    update_history(dbusername,updatevalue=True,updatewhat='expirenotice')
+                    email_body = 'csg,\n\nThe scratch storage quota for user \'%s\' has reached the defined end date. Please update user quota.' % (dbusername) 
+                    send_email(dbusername,dbticketnumber,email_body,process_failure=False)
 
 
 def update_history(dbusername,updatevalue,updatewhat):    
@@ -41,8 +42,8 @@ def update_history(dbusername,updatevalue,updatewhat):
     log_log(': Auto Process: Updated history table for dbusername \'%s\' %s: %s' %(dbusername,updatewhat,updatevalue))
 
 def make_quota_update(dbusername,dbquotalimit):
-    send_cmd = "df"	#for test/dev
-    #send_cmd = "sudo /nfs/home/dasg/apps/bin/glade_setquota set scratch {0} {1}t".format(dbusername,dbquotalimit)
+    #send_cmd = "df"	#for test/dev
+    send_cmd = "sudo /nfs/home/hdig/util/misc/glade_setquota set scratch {0} {1}t".format(dbusername,dbquotalimit)
     p = Popen(send_cmd, stdout=PIPE, shell=True)
     output,err = p.communicate()
     updated_quota = output.decode('utf-8')
@@ -55,7 +56,7 @@ def make_quota_update(dbusername,dbquotalimit):
 
 def get_quota(dbusername):
     #send_cmd = "df"	#for test/dev
-    send_cmd = "sudo /nfs/home/dasg/apps/bin/glade_setquota get scratch {0}".format(dbusername)
+    send_cmd = "sudo /nfs/home/hdig/util/misc/glade_setquota get scratch {0}".format(dbusername)
     p = Popen(send_cmd, stdout=PIPE, shell=True)
     output,err = p.communicate()
     user_quota = output.decode('utf-8')
@@ -77,7 +78,7 @@ def send_email(dbusername,dbticketnumber,email_body,process_failure):
     if process_failure == True:
         msg = EmailMessage()
         msg['From'] = 'hsg@ucar.edu'
-        msg['To'] = 'robertsj@ucar.edu,robertsj@ucar.edu'
+        msg['To'] = 'emma@ucar.edu,robertsj@ucar.edu'
         msg['Subject'] = 'ERROR: Quota Update: %s' %(dbticketnumber)
         email_header = 'csg,\n\nAn error has occured while processing %s. Please verify input data and resubmit.\n\n' % (dbticketnumber)
         email_body = email_header + email_body + email_footer
@@ -85,7 +86,7 @@ def send_email(dbusername,dbticketnumber,email_body,process_failure):
     else:
         msg = EmailMessage()
         msg['From'] = 'hsg@ucar.edu'
-        msg['To'] = 'robertsj@ucar.edu'
+        msg['To'] = 'emma@ucar.edu,robertsj@ucar.edu'
         msg['Subject'] = 'Quota Update: %s' %(dbticketnumber)
         email_body = email_body + email_footer
         msg.set_content(email_body)
@@ -116,8 +117,11 @@ def validate_process_data(dbid,dbticketnumber,dbusername,dbquotalimit,dbenddate,
         errcount += 1
 
     try:
-        datetime.datetime.strptime(dbenddate, '%m-%d-%Y')
-        log_log(': Auto Process: Validated dbenddate \'%s\'' % (dbenddate))
+        if dbenddate == 'reverted':
+            log_log(': Auto Process: Validated dbenddate \'%s\'' % (dbenddate))
+        else:
+            datetime.datetime.strptime(dbenddate, '%m-%d-%Y')
+            log_log(': Auto Process: Validated dbenddate \'%s\'' % (dbenddate))
     except ValueError:
         log_log(': Auto Process: ERROR: Could not validate dbenddate \'%s\'. Check date format.' % (dbenddate))
         email_err.append('Auto Process: ERROR: Could not validate dbenddate \'%s\'. Check date format.' % (dbenddate))
