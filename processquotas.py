@@ -6,7 +6,7 @@ from quotalib import *
 import datetime
 from syslog import syslog
 
-#check dir exists: /glade/u/hsg/quota-automation/
+#check dir exists: /glade/u/hsg/quota-automation/ 
 if not os.path.isdir('/glade/u/hsg/quota-automation/'):
     print('/glade/u/hsg/quota-automation/ does not exist, Exiting!')
     exit(1)
@@ -34,24 +34,23 @@ while True:
 timestamp = datetime.datetime.now().isoformat() #ISO8601
 
 ########### DEV DUMMY DATA #############
+#username = 'robertsj'
+#quotalimit = '10'
+#ticketnumber = 'RC-66666'
+#enddate = 'reverted'
+#enddate = '09-01-2022'
+#addedby = 'robertsj'
+########################################
 
-#variable = 'data'
-username = 'robertsj'       #?*the user who's quota is to be increased
-quotalimit = '10'	    #?*do we want a before/after?
-ticketnumber = 'RC-12345'   #?*not an optional variable
-enddate = '09-01-2022'	    #?*do we want a date or # of days here (we can format ++ days out)
-addedby = 'robertsj'	    #csg/hsg user who added a quota increase/decrease/change. Enter as email addr? Can strip '@...' off.
 active = True
 expirenotice = False
-########################################
 
 check_nolocal()
 
 builddb()
 
 #FOR DB TESTING: call add_entry() 
-add_entry(timestamp,username,quotalimit,enddate,ticketnumber,addedby)
-
+#add_entry(timestamp,username,quotalimit,enddate,ticketnumber,addedby)
 
 if process_entries() is False:
     print('Nothing to process, Exiting!')
