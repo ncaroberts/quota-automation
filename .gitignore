@@ -1,7 +1,9 @@
+*.bak*
 .git/
 __pycache__
 update_scratch_quota_logs/*
 processquotas_logs/*
+scratch_quota_logs/*
 quota.sqlite
 quota.lock
 dev/
